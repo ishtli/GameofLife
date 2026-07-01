@@ -42,6 +42,7 @@ void MainWindow::setupInterface()
     ui->speedCombo->setItemData(1, 120);
     ui->speedCombo->setItemData(2, 45);
     ui->speedCombo->setItemData(3, 10);
+
     ui->speedCombo->setCurrentIndex(1);
 
     ui->rowsSpin->setValue(ui->gameWidget->rowCount());
