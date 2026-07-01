@@ -1,0 +1,4 @@
+#N Cribbage
+#C Small oscillator.
+x = 8, y = 7, rule = B3/S23
+2b2o$bo2bo$o4bo$o4bo$bo2bo$2b2o$4b2o!

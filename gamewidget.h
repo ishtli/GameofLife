@@ -2,6 +2,7 @@
 #define GAMEWIDGET_H
 
 #include <QHash>
+#include <QMap>
 #include <QPoint>
 #include <QSet>
 #include <QString>
@@ -20,6 +21,7 @@ public:
     int aliveCells() const;
     bool isSimRunning() const;
     double zoomLevel() const;
+    void setExternalPattern(const QMap<QString, QVector<QPoint>> &patterns);
 
 public slots:
 
@@ -67,6 +69,7 @@ private:
     QString brushPatternName = "Gosper Glider Gun";
 
     QSet<QPoint> liveCells;
+    QMap<QString, QVector<QPoint>> externalPatterns;
 
     QPoint normalizeCell(const QPoint &cell) const;
     bool isInside(const QPoint &cell) const;

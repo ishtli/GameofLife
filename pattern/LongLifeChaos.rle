@@ -1,0 +1,4 @@
+#N Long Life Chaos
+#C Many acorns and R-pentominoes, useful for long chaotic evolution.
+x = 175, y = 93, rule = B3/S23
+bo23b2o22bo23b2o22bo23b2o22bo23b2o$3bo20b2o25bo20b2o25bo20b2o25bo20b2o$2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo$$$$$$$$$$$$$$$$b2o22bo23b2o22bo23b2o22bo23b2o22bo$2o25bo20b2o25bo20b2o25bo20b2o25bo$bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o$$$$$$$$$$$$$$$$bo23b2o22bo23b2o22bo23b2o22bo23b2o$3bo20b2o25bo20b2o25bo20b2o25bo20b2o$2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo$$$$$$$$$$$$$$$$b2o22bo23b2o22bo23b2o22bo23b2o22bo$2o25bo20b2o25bo20b2o25bo20b2o25bo$bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o$$$$$$$$$$$$$$$$bo23b2o22bo23b2o22bo23b2o22bo23b2o$3bo20b2o25bo20b2o25bo20b2o25bo20b2o$2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo$$$$$$$$$$$$$$$$b2o22bo23b2o22bo23b2o22bo23b2o22bo$2o25bo20b2o25bo20b2o25bo20b2o25bo$bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o18bo22b2o2b3o!

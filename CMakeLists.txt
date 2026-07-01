@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         mainwindow.ui
         gamewidget.cpp
         gamewidget.h
+        rlepattern.h
+        rlepattern.cpp
         ${TS_FILES}
 )
 
@@ -54,6 +56,13 @@ else()
 endif()
 
 target_link_libraries(GameofLife PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+set(PATTERN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/pattern")
+
+if(EXISTS "${PATTERN_DIR}")
+    file(COPY "${PATTERN_DIR}" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}")
+endif()
+
 
 set_target_properties(GameofLife PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

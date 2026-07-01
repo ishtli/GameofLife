@@ -18,6 +18,7 @@ public:
 private:
     void setupInterface();
     void connectControls();
+    void loadExternalPatterns();
     void updateStats(int generation, int aliveCells);
 
     Ui::MainWindow *ui;

@@ -1,9 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "gamewidget.h"
+#include "rlepattern.h"
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QMap>
+#include <QFileInfo>
+#include <QFile>
+#include <QDir>
+#include <QCoreApplication>
 #include <QLabel>
 #include <QPushButton>
 #include <QSpinBox>
@@ -15,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
         setupInterface();
+        loadExternalPatterns();
         connectControls();
         updateStats(ui->gameWidget->generation(), ui->gameWidget->aliveCells());
 
@@ -41,6 +48,43 @@ void MainWindow::setupInterface()
     ui->colsSpin->setValue(ui->gameWidget->columnCount());
 
     statusBar()->showMessage("选择预设后，左键点击画布即可放置图案");
+}
+
+
+void MainWindow::loadExternalPatterns()
+{
+    QMap<QString, QVector<QPoint>> patterns;
+    QDir dir(QCoreApplication::applicationDirPath() + "/pattern");
+
+    // 开发时如果没有复制到运行目录，也尝试从当前目录附近查找。
+    if (!dir.exists()) {
+        dir = QDir(QCoreApplication::applicationDirPath() + "/../pattern");
+    }
+    if (!dir.exists()) {
+        return;
+    }
+
+    const QFileInfoList files = dir.entryInfoList({"*.rle", "*.txt"}, QDir::Files, QDir::Name);
+
+    for (const QFileInfo &fileInfo : files) {
+        QFile file(fileInfo.absoluteFilePath());
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            continue;
+        }
+
+        const QString content = QString::fromUtf8(file.readAll());
+        const QString patternName = RlePattern::readName(content, fileInfo.completeBaseName());
+        const QVector<QPoint> cells = RlePattern::parse(content);
+
+        if (patternName.isEmpty() || cells.isEmpty()) {
+            continue;
+        }
+
+        patterns.insert(patternName, cells);
+        ui->patternCombo->addItem(patternName);
+    }
+
+    ui->gameWidget->setExternalPattern(patterns);
 }
 
 void MainWindow::connectControls()
@@ -79,6 +123,8 @@ void MainWindow::connectControls()
 
     ui->gameWidget->setBrushPattern(ui->patternCombo->currentText());
     ui->gameWidget->setInterval(ui->speedCombo->currentData().toInt());
+
+
 }
 
 void MainWindow::updateStats(int generation, int aliveCells)

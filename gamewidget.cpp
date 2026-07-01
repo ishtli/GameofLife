@@ -1,4 +1,5 @@
 #include "gamewidget.h"
+#include "rlepattern.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -148,6 +149,11 @@ void GameWidget::setBrushPattern(const QString &patternName)
     brushPatternName = patternName;
 }
 
+void GameWidget::setExternalPattern(const QMap<QString, QVector<QPoint>> &patterns)
+{
+    externalPatterns = patterns;
+}
+
 //计算可显示的逻辑画布范围
 QRect GameWidget::visibleCellRange() const
 {
@@ -178,7 +184,7 @@ void GameWidget::paintEvent(QPaintEvent *)
     painter.setBrush(Qt::white);
 
     const QRect visible = visibleCellRange(); //计算逻辑画布上的可视范围
-    const double drawSize = std::max(0.3, std::ceil(cellSize));
+    const double drawSize = std::max(1.0, std::ceil(cellSize));
 
     // 只绘制可视范围内的活细胞
     for (const QPoint &cell : liveCells) {
@@ -348,99 +354,13 @@ void GameWidget::setCell(const QPoint &cell, bool alive)
 
 QVector<QPoint> GameWidget::patternCells(const QString &patternName) const
 {
+    if (externalPatterns.contains(patternName)) {
+        return externalPatterns.value(patternName);
+    }
+
     if (patternName=="Pencil") {
         return {{0,0}};
     }
-    if (patternName == "Glider") {
-        return {{1, 0}, {2, 1}, {0, 2}, {1, 2}, {2, 2}};
-    }
-    if (patternName == "Blinker") {
-        return {{-1, 0}, {0, 0}, {1, 0}};
-    }
-    if (patternName == "Block") {
-        return {{0, 0}, {1, 0}, {0, 1}, {1, 1}};
-    }
-    if (patternName == "Beehive") {
-        return {{1, 0}, {2, 0}, {0, 1}, {3, 1}, {1, 2}, {2, 2}};
-    }
-    if (patternName == "Boat") {
-        return {{0, 0}, {1, 0}, {0, 1}, {2, 1}, {1, 2}};
-    }
-    if (patternName == "Tub") {
-        return {{1, 0}, {0, 1}, {2, 1}, {1, 2}};
-    }
-    if (patternName == "Beacon") {
-        return {{0, 0}, {1, 0}, {0, 1}, {3, 2}, {2, 3}, {3, 3}};
-    }
-    if (patternName == "Toad") {
-        return {{1, 0}, {2, 0}, {3, 0}, {0, 1}, {1, 1}, {2, 1}};
-    }
-    if (patternName == "Clock") {
-        return {{1, 0}, {3, 1}, {0, 2}, {3, 2}, {0, 3}, {2, 4}};
-    }
-    if (patternName == "Pulsar") {
-        return {
-            {-4, -6}, {-3, -6}, {-2, -6}, {2, -6}, {3, -6}, {4, -6},
-            {-6, -4}, {-1, -4}, {1, -4}, {6, -4},
-            {-6, -3}, {-1, -3}, {1, -3}, {6, -3},
-            {-6, -2}, {-1, -2}, {1, -2}, {6, -2},
-            {-4, -1}, {-3, -1}, {-2, -1}, {2, -1}, {3, -1}, {4, -1},
-            {-4, 1}, {-3, 1}, {-2, 1}, {2, 1}, {3, 1}, {4, 1},
-            {-6, 2}, {-1, 2}, {1, 2}, {6, 2},
-            {-6, 3}, {-1, 3}, {1, 3}, {6, 3},
-            {-6, 4}, {-1, 4}, {1, 4}, {6, 4},
-            {-4, 6}, {-3, 6}, {-2, 6}, {2, 6}, {3, 6}, {4, 6}
-        };
-    }
-    if (patternName == "Pentadecathlon") {
-        return {{-1, -4}, {0, -4}, {-2, -3}, {1, -3}, {-1, -2}, {0, -2},
-                {-1, -1}, {0, -1}, {-1, 0}, {0, 0}, {-1, 1}, {0, 1},
-                {-2, 2}, {1, 2}, {-1, 3}, {0, 3}};
-    }
-    if (patternName == "Lightweight Spaceship") {
-        return {{1, 0}, {4, 0}, {0, 1}, {0, 2}, {4, 2},
-                {0, 3}, {1, 3}, {2, 3}, {3, 3}};
-    }
-    if (patternName == "Middleweight Spaceship") {
-        return {{2, 0}, {0, 1}, {4, 1}, {5, 2}, {0, 3}, {5, 3},
-                {1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}};
-    }
-    if (patternName == "Heavyweight Spaceship") {
-        return {{2, 0}, {3, 0}, {0, 1}, {5, 1}, {6, 2}, {0, 3}, {6, 3},
-                {1, 4}, {2, 4}, {3, 4}, {4, 4}, {5, 4}, {6, 4}};
-    }
-    if (patternName == "R-pentomino") {
-        return {{1, 0}, {2, 0}, {0, 1}, {1, 1}, {1, 2}};
-    }
-    if (patternName == "Diehard") {
-        return {{6, 0}, {0, 1}, {1, 1}, {1, 2}, {5, 2}, {6, 2}, {7, 2}};
-    }
-    if (patternName == "Acorn") {
-        return {{1, 0}, {3, 1}, {0, 2}, {1, 2}, {4, 2}, {5, 2}, {6, 2}};
-    }
-    if (patternName == "Simkin Glider Gun") {
-        return {
-            {0, 0}, {1, 0}, {0, 1}, {1, 1},
-            {7, 0}, {8, 0}, {7, 1}, {8, 1},
-            {4, 3}, {5, 3}, {4, 4}, {5, 4},
-            {22, 9}, {26, 9},
-            {21, 10}, {26, 10}, {27, 10},
-            {20, 11}, {21, 11}, {27, 11}, {28, 11}, {31, 11}, {32, 11},
-            {21, 12}, {22, 12}, {27, 12}, {31, 12}, {32, 12},
-            {22, 13}
-        };
-    }
-    if (patternName == "Gosper Glider Gun") {
-        return {
-            {0, 4}, {1, 4}, {0, 5}, {1, 5},
-            {10, 4}, {10, 5}, {10, 6}, {11, 3}, {11, 7}, {12, 2}, {12, 8},
-            {13, 2}, {13, 8}, {14, 5}, {15, 3}, {15, 7}, {16, 4}, {16, 5}, {16, 6}, {17, 5},
-            {20, 2}, {20, 3}, {20, 4}, {21, 2}, {21, 3}, {21, 4}, {22, 1}, {22, 5},
-            {24, 0}, {24, 1}, {24, 5}, {24, 6},
-            {34, 2}, {35, 2}, {34, 3}, {35, 3}
-        };
-    }
-
     return {{0, 0}};
 }
 
